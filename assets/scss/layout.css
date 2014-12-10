@@ -1,0 +1,36 @@
+body {
+  font-family: sans-serif;
+  background-color: white; }
+
+main {
+  margin-right: auto;
+  margin-left: auto;
+  padding-left: 15px;
+  padding-right: 15px; }
+  main:before, main:after {
+    content: " ";
+    display: table; }
+  main:after {
+    clear: both; }
+
+section, footer {
+  margin-left: -15px;
+  margin-right: -15px; }
+  section:before, section:after, footer:before, footer:after {
+    content: " ";
+    display: table; }
+  section:after, footer:after {
+    clear: both; }
+
+/*------------------------------------*\
+    For the /admin pages
+\*------------------------------------*/
+/**
+ * Used for delete buttons
+ */
+.delb {
+  color: red;
+  cursor: pointer; }
+
+.noconfirm {
+  color: red; }
