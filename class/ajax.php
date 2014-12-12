@@ -25,6 +25,8 @@
             }
             else
             {
+                switch ($context->mustpostpar('op'))
+                {
 /*
  * These ops are part of the admin functions of the framework.
  *
