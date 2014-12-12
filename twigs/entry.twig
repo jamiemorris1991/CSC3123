@@ -23,7 +23,7 @@ tinymce.init({
     <div class="row">
         <div class="col-md-8">
             {% if log is defined %}
-            <form action="{{base}}/editentry" method="post" role="form">
+            <form action="{{base}}/editentry/{{log.id}}" method="post" role="form">
             {% else %}
             <form action="{{base}}/newentry" method="post" enctype="multipart/form-data" role="form">
             {% endif %}

@@ -5,7 +5,7 @@
  * @author Jamie Morris
  *
  */
-    class Contact extends Siteaction
+    class Logs extends Siteaction
     {
 /**
  * Handle various admin operations /admin/xxxx
@@ -17,6 +17,8 @@
  */
         public function handle($context, $local)
         { 
+            $u = R::load('user', $context->user()->id);
+            $local->addval('logs', $u->with('Order by lastedit DESC')->ownLog);
             return 'logs.twig';
         }
     }

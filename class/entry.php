@@ -68,10 +68,10 @@
         public function editentry($context,$local)
         {
             $l = R::load('log',$context->rest()[0]);
-            $l->lastedit = R::isoDateTime();
             $l->title = $context->postpar('title','NULL');
             $l->body = $context->postpar('body','NULL');   
             $local->addval('message', 'Log Entry Updated!');
+            $l->lastedit = R::isoDateTime();    
             R::store($l);
             $context->divert('/logs');
         }

@@ -32,7 +32,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for l in siteinfo.logs %}
+                {% for l in logs %}
                     <tr data-id="{{l.id}}">
                         <td>{{l.title}}</td>
                         <td>{{l.created}}</td>
@@ -48,7 +48,7 @@
             </table>
             <p>
                 <button class="btn" data-toggle="modal" data-target="#newentry">Add Log</button>
-                <button class="btn" >Print logs to PDF</button>
+                <a class="btn" href="printer/" target="_blank">Print logs to PDF</a>
             </p>
         </div>
     </div>
