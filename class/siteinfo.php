@@ -26,5 +26,14 @@
         {
             return R::findAll('page', 'order by name');
         }
+/**
+ * Get all the log beans
+ *
+ * @return array
+ */
+        public function logs()
+        {
+            return R::findALL('log','order by date');
+        }
     }
 ?>
