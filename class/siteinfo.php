@@ -33,7 +33,9 @@
  */
         public function logs()
         {
-            return R::findALL('log','order by lastedit DESC');
+            $u = R::load('user',$context->user()->id);
+            return $u->ownLog;
+            //return R::findALL('log','order by lastedit DESC');
         }
     }
 ?>

@@ -1,5 +1,5 @@
 <?php
-require('/csc3123/lib/fpdf.php');
+require('../fpdf.php');
 
 $pdf = new FPDF();
 $pdf->AddPage();

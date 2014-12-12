@@ -21,9 +21,11 @@
                 return $this->newentry($context, $local);
                 break;
             case 'editentry':
-                return $this->delentry($context,local);
+                return $this->editentry($context,$local);
+                break;
             default:
                 return 'entry.twig';
+                break;
             }
         }
         
@@ -39,56 +41,75 @@
         {
             $l = R::dispense('log');
             $l->title = $context->postpar('title','NULL');
-            $l->body = $context-> postpar('body','NULL');
+            $l->body = $context->postpar('body','NULL');
             $l->created = R::isoDateTime();
             $l->lastedit = R::isoDateTime();
             
-            $f = $context->postpar('attachment','No File');
-            if($f != 'NULL')
+            $f = $_FILES["attachment"]["name"];        
+            if($f != NULL)
             {
-                $target_dir = "assets/uploads/";
-                $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
-                $uploadOk = 1;
-                $format = pathinfo($target_file,PATHINFO_EXTENSION);
-                if($format!= "jpg" && $format != "zip" && $format != "doc" && $format != "pdf" )
+                $str = $this->fileupload($context,$local);
+                if ($str != '-1')
                 {
-                    echo "Sorry, only JPG, DOC, ZIP & PDF files are allowed.";
-                    $uploadOk = 0;
+                  $l->attachment = $str;     
                 }
-                $str = $target_dir + $target_file;
-                $l->attachment =$str;
+                else
+                {
+                    return;
+                }
             }
-
             R::store($l);
             $user = $context->user();
             $user->xownLog[] = $l;
-            R::store($user);
-            $local->addval('message', 'Log Entry Added!');
+            R::store($user);          
             $context->divert('/logs');
         }
+        
         public function editentry($context,$local)
         {
-            $l = R::load('log', $context->mustpostpar('id'));
-            
+            $l = R::load('log',$context->rest()[0]);
             $l->lastedit = R::isoDateTime();
             $l->title = $context->postpar('title','NULL');
-            $l->body = $context-> postpar('body','NULL');
+            $l->body = $context->postpar('body','NULL');   
             $local->addval('message', 'Log Entry Updated!');
+            R::store($l);
             $context->divert('/logs');
         }
         
         public function fileupload($context,$local)
         {
-            $target_dir = "uploads/";
-            $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
-            $uploadOk = 1;
+            $target_dir = "assets/uploads";
+            $target_file = $target_dir . '/'. $_FILES["attachment"]["name"];
+            $uploadOk = 0;
             $format = pathinfo($target_file,PATHINFO_EXTENSION);
+            
             if($format!= "jpg" && $format != "zip" && $format != "doc" && $format != "pdf" )
             {
-                echo "Sorry, only JPG, DOC, ZIP & PDF files are allowed.";
-                $uploadOk = 0;
+                $local->addval('errmessage', 'Sorry, only JPG, DOC, ZIP & PDF files can be uploaded.');
+                return -1;
             }
-        }
-        
+            if (file_exists($target_file)) {
+                $local->addval('errmessage', "Sorry, file already exists.");
+                return -1;
+            }
+            if ($_FILES["attachment"]["size"] > 10000000) 
+            {
+                $local->addval('Sorry, your file is too large, limit is 10MB.');
+                return -1;
+            }
+            if(!file_exists($target_dir))
+            {
+                mkdir($target_dir, 0777, true);
+            }
+            if (move_uploaded_file($_FILES["attachment"]["tmp_name"], $target_file))
+            {
+                return $target_file;
+            }
+            else
+            {
+                $local->addval('errmessage', "Sorry, something went wrong.");
+                return -1;
+            }
+        }    
     }
 ?>
