@@ -1,8 +1,13 @@
 {% extends 'page.twig'%}
 
 {% block scripts %}
-
-{%endblock scripts %}
+<script type="text/javascript" src="/csc3123/assets/tinymce/tinymce.min.js"></script>
+<script type="text/javascript">
+tinymce.init({
+    selector: "textarea"
+ });
+</script>
+{% endblock scripts %}
 
 {% block header %}
     <div class="col-md-12">
