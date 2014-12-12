@@ -26,8 +26,12 @@
             else
             {
                 switch ($context->mustpostpar('op'))
-                {
-/*
+                {  
+                    
+                case 'delentry':
+                    R::trash($context->load('log', $context->mustpostpar('id')));
+                    break;
+                    /*     
  * These ops are part of the admin functions of the framework.
  *
  * Add your ajax operations above here.

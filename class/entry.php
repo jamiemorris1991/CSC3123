@@ -15,13 +15,15 @@
  */
         public function handle($context, $local)
         {
-            if($context->action()=='newentry')
+            switch($context->action())
             {
+            case 'newentry':
                 return $this->newentry($context, $local);
-            }
-            else
-            {
-            return 'entry.twig';
+                break;
+            case 'editentry':
+                return $this->delentry($context,local);
+            default:
+                return 'entry.twig';
             }
         }
         
@@ -40,19 +42,53 @@
             $l->body = $context-> postpar('body','NULL');
             $l->created = R::isoDateTime();
             $l->lastedit = R::isoDateTime();
-            $l->attachment =$context->postpar('attachment','NULL');
+            
+            $f = $context->postpar('attachment','No File');
+            if($f != 'NULL')
+            {
+                $target_dir = "assets/uploads/";
+                $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
+                $uploadOk = 1;
+                $format = pathinfo($target_file,PATHINFO_EXTENSION);
+                if($format!= "jpg" && $format != "zip" && $format != "doc" && $format != "pdf" )
+                {
+                    echo "Sorry, only JPG, DOC, ZIP & PDF files are allowed.";
+                    $uploadOk = 0;
+                }
+                $str = $target_dir + $target_file;
+                $l->attachment =$str;
+            }
+
             R::store($l);
             $user = $context->user();
             $user->xownLog[] = $l;
             R::store($user);
             $local->addval('message', 'Log Entry Added!');
-            return 'logs.twig';
+            $context->divert('/logs');
         }
-        /*public function editentry($context,$local)
+        public function editentry($context,$local)
         {
-            $l = R::load('log' $id);
-            $local->addval('message', 'Log Entry Updated!')
-            return 'logs.twig';
-        }*/
+            $l = R::load('log', $context->mustpostpar('id'));
+            
+            $l->lastedit = R::isoDateTime();
+            $l->title = $context->postpar('title','NULL');
+            $l->body = $context-> postpar('body','NULL');
+            $local->addval('message', 'Log Entry Updated!');
+            $context->divert('/logs');
+        }
+        
+        public function fileupload($context,$local)
+        {
+            $target_dir = "uploads/";
+            $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
+            $uploadOk = 1;
+            $format = pathinfo($target_file,PATHINFO_EXTENSION);
+            if($format!= "jpg" && $format != "zip" && $format != "doc" && $format != "pdf" )
+            {
+                echo "Sorry, only JPG, DOC, ZIP & PDF files are allowed.";
+                $uploadOk = 0;
+            }
+        }
+        
     }
 ?>

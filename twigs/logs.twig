@@ -12,18 +12,18 @@
 
 {% block onload %}
     $('#ptab').on('click', function(e){
-        var x = $(e.target)	
-    if (x.hasClass('delb'))
+        var x = $(e.target)
+	if (x.hasClass('delb'))
 	{
 	    e.preventDefault();
 	    e.stopPropagation();
-	    bootbox.confirm('Are you sure you you want to delete this log?', function(r){
+	    bootbox.confirm('Are you sure you you want to delete this Log?', function(r){
 	        if (r)
 		{ // user picked OK
 		    var tr = $(x).parent().parent()
 		    $.post('{{base}}/ajax.php', {
-			    op :'delbean',
-			    'bean' : 'page',
+			    op :'delentry',
+                'bean' : 'page',
 			    id : tr.data('id')
 			},
 			function(data){
@@ -33,8 +33,12 @@
 		}
 	    })
 	}
-    $('#npage').on('show.bs.modal', function(e){
-	$('#npform input,select').val('')
+    else if(x.hasClass('editb'))
+    {
+        
+    }
+    })
+    $('#new-entry').on('show.bs.modal', function(e){
     })
 {% endblock onload %}
 
@@ -59,20 +63,20 @@
                 </thead>
                 <tbody>
                     {% for l in siteinfo.logs %}
-                    <tr>
-                    <td><a></a> {{l.title}}</a></td>
-                    <td>{{l.body|raw}}</td>
-                    <td>{{l.lastedit}}</td>
-                    <td>{{l.attachment}}</td>
-                    <td><i class="editb fa fa-edit"></i></td>
-                    <td><i class="delb fa fa-trash-o"></i></td>
+                    <tr data-id="{{l.id}}">
+                        <td><a></a> {{l.title}}</a></td>
+                        <td>{{l.body|raw}}</td>
+                        <td>{{l.lastedit}}</td>
+                        <td>{{l.attachment}}</td>
+                        <td><i class="editb fa fa-edit" ></i></td>
+                        <td><i class="delb fa fa-trash-o"></i></td>
                     </tr>
                 {% else %}
                     <tr><td colspan="4">No Logs Found</td></tr>
                 {% endfor %}
                 </tbody>
             </table>
-            <p><button class="btn btn-primary" data-toggle="modal" data-target="#new-entry">Add Page</button></p>
+            <p><button class="btn btn-primary" data-toggle="modal" data-target="#new-entry">Add Log</button></p>
         </div>
     </div>
     <div class="modal fade" id="new-entry">
@@ -85,33 +89,44 @@
 		<form action="{{base}}/newentry" method="POST" id="form">
 		    <div class="modal-body">
 			    <div class="form-group">
-				<label for="npname">Name</label>
-				<input type="text" class="form-control" id="npname" placeholder="page name" required="required"/>
+				    <label for="title">Title</label>
+				    <input type="text" class="form-control" id="title" placeholder="Title" name="title" required="required"/>
 			    </div>
 			    <div class="form-group">
-				<label for="npkind">Kind</label>
-				<select id="npkind" class="form-control" required="required">
-				    <option value="">-- Pick a Type --</option>
-				    <option value="1">Object</option>
-				    <option value="2">Template</option>
-				</select>
-			    </div>
-			    <div class="form-group">
-				<label for="npsrc">Name</label>
-				<input type="text" class="form-control" id="npsrc" placeholder="page.twig or class name" required="required"/>
-			    </div>
-			    <div class="checkbox">
-				<label><input type="checkbox" value="1" id="npadmin"/> Needs Admin</label>
-			    </div>
-			    <div class="checkbox">
-				<label><input type="checkbox" value="1" id="npactive"/> Active</label>
+				    <label for="bd" class="control-label">Text</label>
+                    <textarea id="bd" name="body" class="form-control"></textarea>
 			    </div>
 		    </div>
 		    <div class="modal-footer">
 			<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 			<button type="submit" class="btn btn-primary">Add</button>
 		    </div>
-            
+		</form>
+	    </div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+    <div class="modal fade" id="editentry">
+	<div class="modal-dialog">
+	    <div class="modal-content">
+		<div class="modal-header">
+		    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span>                    </button>
+		    <h4 class="modal-title">New Log Entry</h4>
+		</div>
+		<form action="{{base}}/editentry" method="POST" id="form">
+		    <div class="modal-body">
+			    <div class="form-group">
+				    <label for="title">Title</label>
+				    <input type="text" class="form-control" id="title" placeholder="Title" name="title" required="required"/>
+			    </div>
+			    <div class="form-group">
+				    <label for="bd" class="control-label">Test</label>
+                    <textarea id="bd" name="body" class="form-control"></textarea>
+			    </div>
+		    </div>
+		    <div class="modal-footer">
+			<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			<button type="submit" class="btn btn-primary">Submit Changes</button>
+		    </div>
 		</form>
 	    </div><!-- /.modal-content -->
 	</div><!-- /.modal-dialog -->
