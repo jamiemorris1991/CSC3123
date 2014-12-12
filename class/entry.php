@@ -46,11 +46,13 @@
             $user->xownLog[] = $l;
             R::store($user);
             $local->addval('message', 'Log Entry Added!');
-            return 'index.twig';
+            return 'logs.twig';
         }
-        public function editentry($context,$local)
+        /*public function editentry($context,$local)
         {
-            $l = R::load   
-        }
+            $l = R::load('log' $id);
+            $local->addval('message', 'Log Entry Updated!')
+            return 'logs.twig';
+        }*/
     }
 ?>
