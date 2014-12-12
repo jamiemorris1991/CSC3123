@@ -16,8 +16,7 @@
  * @return string	A template name
  */
         public function handle($context, $local)
-        {
-            
+        { 
             return 'logs.twig';
         }
     }

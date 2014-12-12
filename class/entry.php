@@ -48,6 +48,9 @@
             $local->addval('message', 'Log Entry Added!');
             return 'index.twig';
         }
-
+        public function editentry($context,$local)
+        {
+            $l = R::load   
+        }
     }
 ?>

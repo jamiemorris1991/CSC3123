@@ -33,6 +33,9 @@ $(document).ready(function() {
 
 {% block main %}
     <div class="row">
+        
+    </div>
+    <div class="row">
         <div class="col-md-offset-2 col-md-8">
             <table class="table table-striped table-hover" id="ptab">
                 <thead>
@@ -46,8 +49,8 @@ $(document).ready(function() {
                 <tbody>
                     {% for l in siteinfo.logs %}
                     <tr>
-                    <td>{{l.title}}</td>
-                    <td>{{l.body}}</td>
+                    <td><a></a> {{l.title}}</a></td>
+                    <td>{{l.body|raw}}</td>
                     <td>{{l.lastedit}}</td>
                     <td><i class="delb fa fa-trash-o"></i></td>
                     </tr>

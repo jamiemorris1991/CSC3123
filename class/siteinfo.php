@@ -33,7 +33,7 @@
  */
         public function logs()
         {
-            return R::findALL('log','order by lastedit');
+            return R::findALL('log','order by lastedit DESC');
         }
     }
 ?>
